@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 
-// http://stackoverflow.com/questions/20784454/how-to-modify-layer-list-programmatically-in-android
 /**
  * Created by Yamin on 18-Mar-17.
  */
@@ -26,7 +25,7 @@ public class Shadow {
     private @ColorRes int resShadowColor;
     private int cornerRadius, alpha;
 
-    Shadow(Context context) {
+    private Shadow(Context context) {
         this.context = context;
         blur = 6;
         alpha = 5;
@@ -60,16 +59,13 @@ public class Shadow {
             sd = new PaintDrawable(ContextCompat.getColor(context, resShadowColor));
             alpha += deltaAlpha;
 
-            Log.d(TAG, "create: alpha: "+alpha);
             sd.setAlpha(alpha);
-
             sd.setPadding(shadowLeft, shadowUp, shadowRight, shadowDown);
             if (cornerRadius > 0)
                 sd.setCornerRadius(cornerRadius);
             layers[i] = sd;
         }
 
-//        PaintDrawable back = new PaintDrawable(ContextCompat.getColor(context, resBackColor));
         sd = new PaintDrawable(ContextCompat.getColor(context, resBackColor));
         if (cornerRadius > 0)
             sd.setCornerRadius(cornerRadius);
@@ -127,11 +123,11 @@ public class Shadow {
         return alpha;
     }
 
-    public Shadow alpha(@IntRange(from=1) int alpha) {
-        if (alpha > 0)
+    public Shadow alpha(@IntRange(from = 1, to = 255) int alpha) {
+        if (alpha > 0 && alpha < 256)
             this.alpha = alpha;
         else
-            Log.d(TAG, "alpha: "+alpha+"  IS NOT IN RANGE");
+            Log.e(TAG, "alpha: "+alpha+"  IS NOT IN RANGE[1..255]");
         return this;
     }
 
@@ -170,7 +166,7 @@ public class Shadow {
         if (blur > 1)
             this.blur = blur;
         else
-            Log.d(TAG, "setLayersSize: "+blur+" IS NOT IN RANGE");
+            Log.e(TAG, "blur: "+blur+" IS NOT IN RANGE[2..)");
         return this;
     }
 
@@ -191,11 +187,6 @@ public class Shadow {
         public interface ShadowProperties extends ShadowSize, ShadowParam { }
 
         public interface ShadowParam {
-            /**
-             * Set the alpha level of the result drawable [0..255].
-             * @param alpha the delta alpha
-             * @return
-             */
             ShadowParameters alpha(@IntRange(from=1, to = 255) int alpha);
             ShadowParameters blur(@IntRange(from=2) int blur);
             ShadowParameters radius(int radius);
@@ -266,8 +257,12 @@ public class Shadow {
                 return this;
             }
 
+            /**
+             * Set the alpha level of the result drawable [0..255].
+             * @param alpha the end alpha
+             */
             @Override
-            public ShadowParameters alpha(@IntRange(from = 1) int alpha) {
+            public ShadowParameters alpha(@IntRange(from=1, to = 255) int alpha) {
                 this.alpha = alpha;
                 return this;
             }

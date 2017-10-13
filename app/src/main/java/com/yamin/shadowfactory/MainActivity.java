@@ -17,8 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyLog.showLogs(true);
-        MyLog.e("here");
+
         oneDP = (int) Resources.getSystem().getDisplayMetrics().density;
 
         View centerView = findViewById(R.id.main_center_back);
@@ -37,14 +36,14 @@ public class MainActivity extends AppCompatActivity {
         setLeftAndRightShadow(v1, v2);
         setAllShadow(iv);
 
-        LinearLayout.LayoutParams params;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70 * oneDP, 50 * oneDP);
+        params.setMargins(5*oneDP, 5*oneDP, 5*oneDP, 5*oneDP);
+        Shadow roundShadow = setRoundShadow();
         for (int i = 0; i < 10; i++) {
             View view = new View(this);
-            params = new LinearLayout.LayoutParams(70 * oneDP, 50 * oneDP);
-            params.setMargins(5*oneDP, 5*oneDP, 5*oneDP, 5*oneDP);
             view.setLayoutParams(params);
 
-            setRoundShadow(view);
+            roundShadow.set(view);
             llScrollContent.addView(view);
         }
     }
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     private void setLeftAndRightShadow(View v1, View v2) {
         if (v1 == null || v2 == null) return;
 
-//        MyLogger.d("here");
         Shadow shadow = Shadow.Builder
                 .init(this)
                 .shadowLeft(oneDP)
@@ -109,30 +107,27 @@ public class MainActivity extends AppCompatActivity {
                 .build().set(view);
     }
 
-    private void setRoundShadow(View view) {
-        if (view == null) return;
-
-//        Logger.d("here");
-        Shadow.Builder
+    private Shadow setRoundShadow() {
+        return Shadow.Builder
                 .init(this)
                 .shadowAll(oneDP)
                 .radius(150)
                 .alpha(55)
                 .blur(6)
                 .shadowColorRes(R.color.grey)
-                .build().set(view);
+                .build();
     }
 
     private void setAllShadow(ImageView view) {
         if (view == null) return;
 
         int blurSize = 7;
-        int paddingSize = blurSize * oneDP;
+        int shadowSize = oneDP;
+        int paddingSize = blurSize * shadowSize;
         view.setPadding(paddingSize, paddingSize, paddingSize, paddingSize);
-//        Logger.d("here");
         Shadow.Builder
                 .init(this)
-                .shadowAll(oneDP)
+                .shadowAll(shadowSize)
                 .alpha(60)
                 .radius(150)
                 .blur(blurSize)

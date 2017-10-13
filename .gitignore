@@ -1,4 +1,3 @@
-*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -6,3 +5,22 @@
 .DS_Store
 /build
 /captures
+
+*.iml
+*.apk
+*.dex
+*.class
+*.ipr
+*.iws
+*.log
+*.ap_
+bin/
+gen/
+.gradle/
+gradle/wrapper/
+.idea/
+.navigation/
+captures/
+build/
+/*/build/
+proguard/

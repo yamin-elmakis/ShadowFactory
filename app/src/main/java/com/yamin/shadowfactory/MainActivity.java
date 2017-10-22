@@ -11,14 +11,14 @@ import com.yamin.shadowlibrary.Shadow;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int oneDP;
+    private float oneDP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        oneDP = (int) Resources.getSystem().getDisplayMetrics().density;
+        oneDP = Resources.getSystem().getDisplayMetrics().density;
 
         View centerView = findViewById(R.id.main_center_back);
         View footerView = findViewById(R.id.main_footer_back);
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setLeftAndRightShadow(v1, v2);
         setAllShadow(iv);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(70 * oneDP, 50 * oneDP);
-        params.setMargins(5*oneDP, 5*oneDP, 5*oneDP, 5*oneDP);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int)(70 * oneDP), (int)(50 * oneDP));
+        params.setMargins((int)(5*oneDP), (int)(5*oneDP), (int)(5*oneDP), (int)(5*oneDP));
         Shadow roundShadow = setRoundShadow();
         for (int i = 0; i < 10; i++) {
             View view = new View(this);
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //        MyLogger.d("here");
         Shadow shadow = Shadow.Builder
                 .init(this)
-                .shadowDown(oneDP)
+                .shadowDown((int) oneDP)
                 .blur(6)
                 .alpha(55)
                 .shadowColorRes(R.color.yellow)
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 //        MyLogger.d("here");
         Shadow.Builder
                 .init(this)
-                .shadowUp(oneDP)
-                .shadowDown(oneDP)
+                .shadowUp((int) oneDP)
+                .shadowDown((int) oneDP)
                 .alpha(30)
                 .blur(6)
                 .shadowColorRes(R.color.red)
@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
         Shadow shadow = Shadow.Builder
                 .init(this)
-                .shadowLeft(oneDP)
-                .shadowRight(oneDP)
+                .shadowLeft((int) oneDP)
+                .shadowRight((int) oneDP)
                 .alpha(60)
                 .blur(6)
                 .backgroundColorRes(android.R.color.holo_blue_bright)
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 //        MyLogger.d("here");
         Shadow.Builder
                 .init(this)
-                .shadowUp(oneDP)
+                .shadowUp((int) oneDP)
                 .alpha(70)
                 .blur(8)
                 .backgroundColorRes(R.color.blue)
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
     private Shadow setRoundShadow() {
         return Shadow.Builder
                 .init(this)
-                .shadowAll(oneDP)
+                .shadowAll((int) oneDP)
                 .radius(150)
                 .alpha(55)
                 .blur(6)
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         if (view == null) return;
 
         int blurSize = 7;
-        int shadowSize = oneDP;
+        int shadowSize = (int) oneDP;
         int paddingSize = blurSize * shadowSize;
         view.setPadding(paddingSize, paddingSize, paddingSize, paddingSize);
         Shadow.Builder

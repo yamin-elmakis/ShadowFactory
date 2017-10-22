@@ -18,6 +18,12 @@ import android.view.View;
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class Shadow {
     private static final String TAG = "Shadow";
+    private static int DEFAULT_BLUR = 6;
+    private static int DEFAULT_ALPHA = 5;
+    @ColorRes
+    private static int DEFAULT_BACK_COLOR = android.R.color.white;
+    @ColorRes
+    private static int DEFAULT_SHADOW_COLOR = android.R.color.background_light ;
     private int blur;
     private Context context;
     private int shadowLeft, shadowUp, shadowRight, shadowDown;
@@ -27,21 +33,27 @@ public class Shadow {
 
     private Shadow(Context context) {
         this.context = context;
-        blur = 6;
-        alpha = 5;
+        blur = DEFAULT_BLUR;
+        alpha = DEFAULT_ALPHA;
         shadowLeft = 0;
         shadowUp = 0;
         shadowRight = 0;
         shadowDown = 0;
         cornerRadius = 0;
-        resBackColor = android.R.color.white;
-        resShadowColor = android.R.color.darker_gray;
+        resBackColor = DEFAULT_BACK_COLOR;
+        resShadowColor = DEFAULT_SHADOW_COLOR;
     }
 
     public LayerDrawable set(View view) {
         LayerDrawable layerDrawable = create();
         PaintDrawable back = (PaintDrawable)layerDrawable.getDrawable(blur - 1);
-        back.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), view.getPaddingBottom());
+
+        back.setPadding(view.getPaddingLeft() - shadowLeft * (blur - 1),
+                view.getPaddingTop() - shadowUp * (blur - 1),
+                view.getPaddingRight() - shadowRight* (blur - 1),
+                view.getPaddingBottom() - shadowDown * (blur
+                        - 1));
+
         layerDrawable.setDrawableByLayerId(blur - 1, back);
         if (Build.VERSION.SDK_INT > 15)
             view.setBackground(layerDrawable);
@@ -71,7 +83,6 @@ public class Shadow {
             sd.setCornerRadius(cornerRadius);
 
         layers[blur - 1] = sd;
-
         return new LayerDrawable(layers);
     }
 
@@ -162,12 +173,28 @@ public class Shadow {
         return blur;
     }
 
-    public Shadow blur(@IntRange(from=2) int blur) {
+    public Shadow blur(@IntRange(from=1) int blur) {
         if (blur > 1)
             this.blur = blur;
         else
             Log.e(TAG, "blur: "+blur+" IS NOT IN RANGE[2..)");
         return this;
+    }
+
+    public static void setDefaultAlpha(@IntRange(from=1, to = 255) int alpha) {
+        DEFAULT_ALPHA = alpha;
+    }
+
+    public static void setDefaultBlur(@IntRange(from=1) int blur) {
+        DEFAULT_BLUR = blur;
+    }
+
+    public static void setDefaultBackgroundColorRes(@ColorRes int backgroundColorRes) {
+        DEFAULT_BACK_COLOR = backgroundColorRes;
+    }
+
+    public static void setDefaultShadowColorRes(@ColorRes int shadowColorRes) {
+        DEFAULT_SHADOW_COLOR = shadowColorRes;
     }
 
     public static class Builder {
@@ -188,8 +215,10 @@ public class Shadow {
 
         public interface ShadowParam {
             ShadowParameters alpha(@IntRange(from=1, to = 255) int alpha);
-            ShadowParameters blur(@IntRange(from=2) int blur);
+            ShadowParameters blur(@IntRange(from=1) int blur);
+            ShadowParameters defaultParameters();
             ShadowParameters radius(int radius);
+            ShadowColors defaultAll();
         }
 
         public interface ShadowParameters extends ShadowColor, ShadowParam { }
@@ -197,6 +226,7 @@ public class Shadow {
         public interface ShadowColor {
             ShadowColors backgroundColorRes(@ColorRes int backgroundColor);
             ShadowColors shadowColorRes(@ColorRes int shadowColor);
+            ShadowColors defaultColors();
         }
 
         public interface ShadowColors extends ShadowColor, Build { }
@@ -257,6 +287,11 @@ public class Shadow {
                 return this;
             }
 
+            @Override
+            public ShadowColors defaultAll() {
+                return this;
+            }
+
             /**
              * Set the alpha level of the result drawable [0..255].
              * @param alpha the end alpha
@@ -268,8 +303,13 @@ public class Shadow {
             }
 
             @Override
-            public ShadowParameters blur(@IntRange(from = 2) int blur) {
+            public ShadowParameters blur(@IntRange(from = 1) int blur) {
                 this.blur = blur;
+                return this;
+            }
+
+            @Override
+            public ShadowParameters defaultParameters() {
                 return this;
             }
 
@@ -282,6 +322,11 @@ public class Shadow {
             @Override
             public ShadowColors shadowColorRes(@ColorRes int shadowColor) {
                 this.shadowColor = shadowColor;
+                return this;
+            }
+
+            @Override
+            public ShadowColors defaultColors() {
                 return this;
             }
 

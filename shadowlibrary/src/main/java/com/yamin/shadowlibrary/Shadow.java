@@ -19,14 +19,14 @@ import android.view.View;
 public class Shadow {
     private static final String TAG = "Shadow";
     private static int DEFAULT_BLUR = 6;
-    private static int DEFAULT_ALPHA = 5;
+    private static int DEFAULT_ALPHA = 50;
     @ColorRes
     private static int DEFAULT_BACK_COLOR = android.R.color.white;
     @ColorRes
     private static int DEFAULT_SHADOW_COLOR = android.R.color.background_light ;
     private int blur;
     private Context context;
-    private int shadowLeft, shadowUp, shadowRight, shadowDown;
+    private int shadowLeft, shadowTop, shadowRight, shadowBottom;
     private @ColorRes int resBackColor;
     private @ColorRes int resShadowColor;
     private int cornerRadius, alpha;
@@ -36,9 +36,9 @@ public class Shadow {
         blur = DEFAULT_BLUR;
         alpha = DEFAULT_ALPHA;
         shadowLeft = 0;
-        shadowUp = 0;
+        shadowTop = 0;
         shadowRight = 0;
-        shadowDown = 0;
+        shadowBottom = 0;
         cornerRadius = 0;
         resBackColor = DEFAULT_BACK_COLOR;
         resShadowColor = DEFAULT_SHADOW_COLOR;
@@ -49,10 +49,9 @@ public class Shadow {
         PaintDrawable back = (PaintDrawable)layerDrawable.getDrawable(blur - 1);
 
         back.setPadding(view.getPaddingLeft() - shadowLeft * (blur - 1),
-                view.getPaddingTop() - shadowUp * (blur - 1),
+                view.getPaddingTop() - shadowTop * (blur - 1),
                 view.getPaddingRight() - shadowRight* (blur - 1),
-                view.getPaddingBottom() - shadowDown * (blur
-                        - 1));
+                view.getPaddingBottom() - shadowBottom * (blur - 1));
 
         layerDrawable.setDrawableByLayerId(blur - 1, back);
         if (Build.VERSION.SDK_INT > 15)
@@ -72,7 +71,7 @@ public class Shadow {
             alpha += deltaAlpha;
 
             sd.setAlpha(alpha);
-            sd.setPadding(shadowLeft, shadowUp, shadowRight, shadowDown);
+            sd.setPadding(shadowLeft, shadowTop, shadowRight, shadowBottom);
             if (cornerRadius > 0)
                 sd.setCornerRadius(cornerRadius);
             layers[i] = sd;
@@ -88,18 +87,18 @@ public class Shadow {
 
     public Shadow shadowAll(int shadow) {
         this.shadowLeft = shadow;
-        this.shadowUp = shadow;
+        this.shadowTop = shadow;
         this.shadowRight = shadow;
-        this.shadowDown = shadow;
+        this.shadowBottom = shadow;
         return this;
     }
 
-    public float getShadowDown() {
-        return shadowDown;
+    public float getShadowBottom() {
+        return shadowBottom;
     }
 
-    public Shadow shadowDown(int shadowDown) {
-        this.shadowDown = shadowDown;
+    public Shadow shadowBottom(int shadowBottom) {
+        this.shadowBottom = shadowBottom;
         return this;
     }
 
@@ -121,12 +120,12 @@ public class Shadow {
         return this;
     }
 
-    public int getShadowUp() {
-        return shadowUp;
+    public int getShadowTop() {
+        return shadowTop;
     }
 
-    public Shadow shadowUp(int shadowUp) {
-        this.shadowUp = shadowUp;
+    public Shadow shadowTop(int shadowTop) {
+        this.shadowTop = shadowTop;
         return this;
     }
 
@@ -204,8 +203,8 @@ public class Shadow {
         }
 
         public interface ShadowSize {
-            ShadowProperties shadowDown(int shadowDown);
-            ShadowProperties shadowUp(int shadowUp);
+            ShadowProperties shadowBottom(int shadowBottom);
+            ShadowProperties shadowTop(int shadowTop);
             ShadowProperties shadowLeft(int shadowLeft);
             ShadowProperties shadowRight(int shadowRight);
             ShadowParameters shadowAll(int shadow);
@@ -239,24 +238,24 @@ public class Shadow {
 
             private Context context;
             private int blur, radius, alpha;
-            private int left, right, up, down;
+            private int left, right, top, bottom;
             private @ColorRes int backColor;
             private @ColorRes int shadowColor;
 
             public ShadowSize context(Context context) {
-                this.context = context;
+                this.context = context.getApplicationContext();
                 return this;
             }
 
             @Override
-            public ShadowProperties shadowDown(int shadowDown) {
-                down = shadowDown;
+            public ShadowProperties shadowBottom(int shadowBottom) {
+                bottom = shadowBottom;
                 return this;
             }
 
             @Override
-            public ShadowProperties shadowUp(int shadowUp) {
-                up = shadowUp;
+            public ShadowProperties shadowTop(int shadowTop) {
+                top = shadowTop;
                 return this;
             }
 
@@ -274,8 +273,8 @@ public class Shadow {
 
             @Override
             public ShadowParameters shadowAll(int shadow) {
-                shadowUp(shadow);
-                shadowDown(shadow);
+                shadowTop(shadow);
+                shadowBottom(shadow);
                 shadowLeft(shadow);
                 shadowRight(shadow);
                 return this;
@@ -337,10 +336,10 @@ public class Shadow {
                     shadow.shadowLeft(left);
                 if (right > 0)
                     shadow.shadowRight(right);
-                if (up > 0)
-                    shadow.shadowUp(up);
-                if (down > 0)
-                    shadow.shadowDown(down);
+                if (top > 0)
+                    shadow.shadowTop(top);
+                if (bottom > 0)
+                    shadow.shadowBottom(bottom);
                 if (radius > 0)
                     shadow.radius(radius);
                 if (blur > 0)

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ShadowFactory</string>
+    <string name="default_str">number</string>
 </resources>

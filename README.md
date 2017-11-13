@@ -40,3 +40,5 @@ dependencies {
 		.shadowColorRes(R.color.grey)
 		.build().set(view);
 ```
+
+![Main Screen](images/Screenshot_Main.png)

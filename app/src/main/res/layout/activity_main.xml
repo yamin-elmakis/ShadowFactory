@@ -1,42 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.yamin.shadowfactory.MainActivity">
 
-    <TextView
-        android:id="@+id/main_tv_default"
-        android:layout_width="wrap_content"
-        android:padding="7dp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/main_title_back"
-        android:layout_marginTop="15dp"
-        android:layout_height="wrap_content"
-        android:text="@string/default_str"/>
-
-    <ScrollView
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/main_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/main_center_back"
-        android:layout_below="@+id/main_title_back"
-        android:layout_toStartOf="@+id/main_tv_default"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="-5dp"
+        android:layout_above="@+id/main_ll"
         android:layout_marginTop="-5dp"
-        android:layout_toLeftOf="@+id/main_tv_default"
-        android:layout_marginRight="10dp">
+        android:layout_below="@+id/main_title_back" >
 
-        <LinearLayout
-            android:id="@+id/main_scroll_content"
+        <TextView
+            android:id="@+id/main_tv_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/default_str"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main_tv_default"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:background="@color/blue"
+            app:layout_constraintBottom_toBottomOf="@+id/main_space"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:id="@+id/main_scroll_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical" />
+
+        </ScrollView>
+
+        <Space
+            android:id="@+id/main_space"
+            android:layout_width="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/main_center_back"
+            android:layout_height="5dp" />
+
+        <LinearLayout
+            android:id="@+id/main_center_back"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:orientation="horizontal"
+            tools:background="#62d11111"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
-            android:orientation="vertical" />
+            android:layout_centerInParent="true" >
 
-    </ScrollView>
+            <ImageView
+                android:id="@+id/main_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@android:drawable/ic_dialog_dialer" />
 
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <!-- keep below the ConstraintLayout so it will be above it -->
     <LinearLayout
         android:id="@+id/main_title_back"
         android:layout_width="match_parent"
@@ -55,28 +95,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/main_center_back"
+        android:id="@+id/main_ll"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_centerInParent="true" >
-
-        <ImageView
-            android:id="@+id/main_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:src="@android:drawable/ic_dialog_dialer" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_above="@+id/main_footer_back"
-        android:layout_below="@+id/main_center_back"
         android:layout_marginBottom="-5dp"
         android:layout_marginTop="-5dp"
         android:gravity="center"
